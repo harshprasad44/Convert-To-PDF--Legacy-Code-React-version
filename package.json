@@ -1,0 +1,11 @@
+{
+  "name": "nerdyweb",
+  "version": "1.0.0",
+  "description": "File converter tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harsh Prasad",
+  "license": "ISC"
+}
