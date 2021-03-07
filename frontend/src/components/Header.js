@@ -9,7 +9,7 @@ const Header = () => {
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand className="header-logo">
-              <img src={"ccc"} width="20%" alt="logo"></img>webscreenpdf
+              <img src={"ccc"} width="20%" alt="logo"></img>Nerdy Web
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
