@@ -5,6 +5,8 @@ import morgan from "morgan";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
+import route from "./routes/route.js";
+
 dotenv.config();
 
 const app = express();
@@ -15,7 +17,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json());
 
-// app.use("/api/products", productRoutes);
+app.use("/api", route);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
