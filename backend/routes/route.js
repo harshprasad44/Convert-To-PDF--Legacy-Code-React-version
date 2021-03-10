@@ -1,7 +1,8 @@
 import express from "express";
 const router = express.Router();
-import { pdfToPpt } from "../controllers/controller.js";
+import { toPdf, testing } from "../controllers/controller.js";
 
-router.route("/pdf-pptx").get(pdfToPpt);
+router.route("/to-pdf").get(toPdf);
+router.route("/test").get(testing);
 
 export default router;
