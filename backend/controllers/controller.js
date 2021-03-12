@@ -23,18 +23,20 @@ const testing = asyncHandler(async (req, res) => {
 // @access  Public
 const toPdf = asyncHandler(async (req, res) => {
   convertapi
-    .convert("pdf", { File: `${__dirname}/uploads/exp5.docx` })
+    .convert(
+      "pdf",
+      {
+        File: `https://v2.convertapi.com/d/${req.params.id}`,
+      },
+      "docx"
+    )
     .then(function (result) {
-      // get converted file url
-      console.log("Converted file url: " + result.file.url);
-
+      console.log("Conversion done");
+      console.log(result.file.url);
       res.send(result.file.url);
     })
-    .then(function (file) {
-      console.log("File converted");
-    })
-    .catch(function (e) {
-      console.error(e.toString());
+    .catch((error) => {
+      console.log(error);
     });
 });
 

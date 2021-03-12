@@ -2,14 +2,17 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cors from "cors";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 import route from "./routes/route.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -18,6 +21,10 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use("/api", route);
+app.use("/api/upload", uploadRoutes);
+
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
