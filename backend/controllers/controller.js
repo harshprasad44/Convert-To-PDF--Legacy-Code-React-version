@@ -10,14 +10,6 @@ const __dirname = path.resolve();
 const CONVERT_API_SECRET = process.env.CONVERT_API_SECRET;
 const convertapi = new ConvertAPI(CONVERT_API_SECRET);
 
-///////////////////////////
-
-const testing = asyncHandler(async (req, res) => {
-  console.log(__dirname);
-});
-
-//////////////////////////
-
 // @desc    PDF - PPT
 // @route   POST /api/pdf-pptx
 // @access  Public
@@ -40,4 +32,4 @@ const toPdf = asyncHandler(async (req, res) => {
     });
 });
 
-export { toPdf, testing };
+export { toPdf };
