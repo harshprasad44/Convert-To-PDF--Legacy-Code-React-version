@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 
 const MainScreen = ({ match, history }) => {
-  const [image, setImage] = useState("");
+  const [fileLoading, setFileLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [fileId, setFileId] = useState("");
   const [convertedUrl, setConvertedUrl] = useState("");
@@ -18,11 +18,13 @@ const MainScreen = ({ match, history }) => {
       var formData = new FormData();
       var file = document.querySelector("#file");
       formData.append("file", file.files[0]);
+      setFileLoading(true);
       const { data } = await axios.post("https://v2.convertapi.com/upload?filename=nerdyweb.docx", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      setFileLoading(false);
       console.log(data);
       setFileId(data.FileId);
     } catch (error) {
@@ -42,7 +44,8 @@ const MainScreen = ({ match, history }) => {
     <>
       <FormContainer>
         <form onSubmit={submitHandler}>
-          <input type="file" id="file" name="File" onChange={uploadFileHandler} />
+          <input type="file" accept=".docx" id="file" name="File" onChange={uploadFileHandler} />
+          {fileLoading && <Loader />}
           <input type="hidden" name="StoreFile" value="true" />
           <input type="submit" value="Convert file" />
         </form>
