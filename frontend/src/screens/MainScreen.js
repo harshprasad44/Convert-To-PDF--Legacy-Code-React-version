@@ -10,6 +10,8 @@ import FormContainer from "../components/FormContainer";
 const MainScreen = ({ match, history }) => {
   const [fileLoading, setFileLoading] = useState(false);
   const [fileConverting, setFileConverting] = useState(false);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [conversionError, setConversionError] = useState(false);
   const [fileId, setFileId] = useState("");
   const [convertedUrl, setConvertedUrl] = useState("");
 
@@ -21,13 +23,21 @@ const MainScreen = ({ match, history }) => {
       let fileName = fName.split("fakepath")[1];
       fileName = fileName.substring(1);
 
-      if (!fileName || fileName === null) {
+      if (!fileName || fileName === null || fileName === undefined) {
         fileName = "nerdyweb.docx";
       }
 
       console.log(fileName);
 
-      formData.append("file", file.files[0]);
+      var FileSize = file.files[0].size; // in MiB
+      console.log(FileSize);
+      if (FileSize > 100000) {
+        alert("File size exceeds 100 KB");
+        return;
+      } else {
+        formData.append("file", file.files[0]);
+      }
+
       setFileLoading(true);
       const { data } = await axios.post(`https://v2.convertapi.com/upload?filename=${fileName}`, formData, {
         headers: {
@@ -35,29 +45,48 @@ const MainScreen = ({ match, history }) => {
         },
       });
       setFileLoading(false);
+
       console.log(data);
       setFileId(data.FileId);
     } catch (error) {
+      setFileUploadError(true);
       console.error(error);
     }
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setFileConverting(true);
-    const { data } = await axios.get(`/api/to-pdf/${fileId}`);
-    setFileConverting(false);
-    console.log(data);
-    setConvertedUrl(data);
-    document.getElementById("download").click();
+    try {
+      setFileConverting(true);
+      const { data } = await axios.get(`/api/pptx-pdf/${fileId}`);
+      setFileConverting(false);
+      setConvertedUrl(data);
+      document.getElementById("download").click();
+    } catch (error) {
+      setConversionError(true);
+      setFileConverting(false);
+      console.error(error);
+    }
   };
 
   return (
     <>
       <FormContainer>
         <form onSubmit={submitHandler}>
-          <input type="file" accept=".docx" id="file" name="File" onChange={uploadFileHandler} />
+          {conversionError && (
+            <Message variant="danger">
+              Oops! There was error converting the file. Please check the file and try again.
+            </Message>
+          )}
+
+          <input type="file" accept=".docx" id="file" name="File" onChange={uploadFileHandler} required />
+
           {fileLoading && <Loader />}
+          {fileUploadError && (
+            <Message variant="danger">
+              Oops! There was error uploading the file. Please check the file and try again.
+            </Message>
+          )}
           <input type="hidden" name="StoreFile" value="true" />
           <input type="submit" value="Convert file" />
           {fileConverting && <Loader />}
