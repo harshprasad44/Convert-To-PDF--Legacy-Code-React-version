@@ -19,6 +19,7 @@ const toPdf = asyncHandler(async (req, res) => {
       "pdf",
       {
         File: `https://v2.convertapi.com/d/${req.params.id}`,
+        FileName: req.params.FileName,
       },
       "docx"
     )

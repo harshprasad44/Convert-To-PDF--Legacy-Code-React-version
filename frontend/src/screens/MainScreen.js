@@ -10,10 +10,16 @@ import FormContainer from "../components/FormContainer";
 const MainScreen = ({ match, history }) => {
   const [fileLoading, setFileLoading] = useState(false);
   const [fileConverting, setFileConverting] = useState(false);
+
   const [fileUploadError, setFileUploadError] = useState(false);
   const [conversionError, setConversionError] = useState(false);
+
   const [fileId, setFileId] = useState("");
   const [convertedUrl, setConvertedUrl] = useState("");
+
+  //////////////////////// QUERY PARAMETERS
+  const [FileName, setFileName] = useState(null);
+  ///////////////////////
 
   const uploadFileHandler = async (e) => {
     try {
@@ -28,6 +34,7 @@ const MainScreen = ({ match, history }) => {
       }
 
       console.log(fileName);
+      setFileName(fileName);
 
       var FileSize = file.files[0].size; // in MiB
       console.log(FileSize);
@@ -58,7 +65,7 @@ const MainScreen = ({ match, history }) => {
     e.preventDefault();
     try {
       setFileConverting(true);
-      const { data } = await axios.get(`/api/pptx-pdf/${fileId}`);
+      const { data } = await axios.get(`/api/docx-pdf/${fileId}/${FileName}`);
       setFileConverting(false);
       setConvertedUrl(data);
       document.getElementById("download").click();
@@ -88,6 +95,7 @@ const MainScreen = ({ match, history }) => {
             </Message>
           )}
           <input type="hidden" name="StoreFile" value="true" />
+          <input type="text" placeholder="FileName" onChange={(e) => setFileName(e.target.value.trim())} />
           <input type="submit" value="Convert file" />
           {fileConverting && <Loader />}
         </form>
