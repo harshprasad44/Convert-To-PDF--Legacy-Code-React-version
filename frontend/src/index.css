@@ -39,6 +39,7 @@ h2 {
   padding: 0.5rem 0;
 }
 
-.rating span {
-  margin: 0.1rem;
+.ContainerBox {
+  display: flex;
+  justify-content: center;
 }

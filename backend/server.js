@@ -7,7 +7,6 @@ import cors from "cors";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 import route from "./routes/route.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
 
@@ -21,7 +20,6 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use("/api", route);
-app.use("/api/upload", uploadRoutes);
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
